@@ -8,20 +8,16 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.tictactoeonline.databinding.ActivityGameBinding
 import com.example.tictactoeonline.databinding.ActivityMainBinding
+import com.example.tictactoeonline.GameData
 
 class GameActivity : AppCompatActivity(), View.OnClickListener {
 
     lateinit var binding: ActivityGameBinding
+    private var gameModel: GameModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGameBinding.inflate(layoutInflater)
-        //enableEdgeToEdge()
         setContentView(binding.root)
-/*        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.gameActivity)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }*/
 
         binding.btn0.setOnClickListener(this)
         binding.btn1.setOnClickListener(this)
@@ -35,6 +31,42 @@ class GameActivity : AppCompatActivity(), View.OnClickListener {
 
         binding.startGameBtn.setOnClickListener {
             startGame()
+        }
+
+        GameData.gameModel.observe(this){
+            gameModel = it
+            setUi()
+        }
+    }
+
+    private fun setUi() {
+        gameModel?.apply {
+            binding.btn0.text = filledPos[0]
+            binding.btn1.text = filledPos[1]
+            binding.btn2.text = filledPos[2]
+            binding.btn3.text = filledPos[3]
+            binding.btn4.text = filledPos[4]
+            binding.btn5.text = filledPos[5]
+            binding.btn6.text = filledPos[6]
+            binding.btn7.text = filledPos[7]
+            binding.btn8.text = filledPos[8]
+
+            binding.gameStatusText.text =
+                when(gameStatus){
+                    GameStatus.CREATED -> {
+                        "Game ID: " + gameId
+                    }
+                    GameStatus.JOINED -> {
+                        "Click on start game"
+                    }
+                    GameStatus.INPROGRESS -> {
+                        currentPlayer + " turn"
+                    }
+                    GameStatus.FINISHED -> {
+                        if(winner.isNotEmpty()) winner + " Won!"
+                        else "DRAW"
+                    }
+                }
         }
     }
 

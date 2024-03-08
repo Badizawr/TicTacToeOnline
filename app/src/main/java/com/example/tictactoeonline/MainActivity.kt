@@ -19,19 +19,18 @@ class MainActivity : AppCompatActivity() {
         binding.playOffline.setOnClickListener {
             createOfflineGame()
         }
-/*        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }*/
-
     }
 
     private fun createOfflineGame() {
+        GameData.saveGameModel(
+            GameModel(
+                gameStatus = GameStatus.JOINED
+            )
+        )
         startGame()
     }
 
-    private fun startGame(){
+    private fun startGame() {
         startActivity(Intent(this, GameActivity::class.java))
     }
 }
