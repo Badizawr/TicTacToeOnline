@@ -2,6 +2,7 @@ package com.example.tictactoeonline
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -51,15 +52,19 @@ class GameActivity : AppCompatActivity(), View.OnClickListener {
             binding.btn7.text = filledPos[7]
             binding.btn8.text = filledPos[8]
 
+            binding.startGameBtn.visibility = View.VISIBLE
+
             binding.gameStatusText.text =
                 when(gameStatus){
                     GameStatus.CREATED -> {
+                        binding.startGameBtn.visibility = View.INVISIBLE
                         "Game ID: " + gameId
                     }
                     GameStatus.JOINED -> {
                         "Click on start game"
                     }
                     GameStatus.INPROGRESS -> {
+                        binding.startGameBtn.visibility = View.INVISIBLE
                         currentPlayer + " turn"
                     }
                     GameStatus.FINISHED -> {
@@ -71,8 +76,62 @@ class GameActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun startGame() {
+        gameModel?.apply {
+            updateGameData(
+                GameModel(
+                    gameId = gameId,
+                    gameStatus = GameStatus.INPROGRESS,
+                )
+            )
+        }
+    }
+    private fun updateGameData(model: GameModel){
+        GameData.saveGameModel(model)
     }
 
+    private fun checkForWinner(){
+        val winningPos = arrayOf(
+            intArrayOf(0,1,2),
+            intArrayOf(3,4,5),
+            intArrayOf(6,7,8),
+            intArrayOf(0,3,6),
+            intArrayOf(1,4,7),
+            intArrayOf(2,5,8),
+            intArrayOf(0,4,8),
+            intArrayOf(2,4,6)
+        )
+
+        gameModel?.apply {
+            for (i in winningPos) {
+                if(
+                    filledPos[i[0]] == filledPos[i[1]] &&
+                    filledPos[i[1]] == filledPos[i[2]] &&
+                    filledPos[i[0]].isNotEmpty()
+                ) {
+                    gameStatus = GameStatus.FINISHED
+                    winner = filledPos[i[0]]
+                }
+            }
+            if (filledPos.none(){it.isEmpty()}) {
+                gameStatus = GameStatus.FINISHED
+            }
+
+            updateGameData(this)
+        }
+    }
     override fun onClick(v: View?) {
+        gameModel?.apply {
+            if(gameStatus != GameStatus.INPROGRESS) {
+                Toast.makeText(applicationContext,"Game not started", Toast.LENGTH_SHORT).show()
+                return;
+            }
+            val clickedPos = (v?.tag as String).toInt()
+            if(filledPos[clickedPos].isEmpty()) {
+                filledPos[clickedPos] = currentPlayer
+                currentPlayer = if(currentPlayer == "X") "O" else "X"
+                checkForWinner()
+                updateGameData(this)
+            }
+        }
     }
 }
