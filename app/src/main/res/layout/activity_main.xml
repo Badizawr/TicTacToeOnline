@@ -25,8 +25,54 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/play_offline"
-        android:text="Palay Offline"
+        android:text="Play Offline"
         android:layout_margin="8dp"
         android:padding="8dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        android:text="Or"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/create_online_game_btn"
+        android:text="Create Online Game"
+        android:layout_margin="8dp"
+        android:padding="8dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        android:text="Or"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+    
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/game_id"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:inputType="number"
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        android:hint="Enter game Id:"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/join_online_game_btn"
+        android:text="Join Online Game"
+        android:layout_margin="8dp"
+        android:padding="8dp"/>
+
 
 </LinearLayout>

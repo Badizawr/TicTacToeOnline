@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.tictactoeonline.databinding.ActivityMainBinding
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,6 +21,29 @@ class MainActivity : AppCompatActivity() {
         binding.playOffline.setOnClickListener {
             createOfflineGame()
         }
+
+        binding.createOnlineGameBtn.setOnClickListener {
+            createOnlineGame()
+        }
+
+        binding.joinOnlineGameBtn.setOnClickListener {
+            joinOnlineGame()
+        }
+    }
+
+    private fun joinOnlineGame() {
+
+    }
+
+    private fun createOnlineGame() {
+        GameData.myID = "X"
+        GameData.saveGameModel(
+            GameModel(
+                gameStatus = GameStatus.CREATED,
+                gameId = Random.nextInt(1000..9999).toString()
+            )
+        )
+        startGame()
     }
 
     private fun createOfflineGame() {
