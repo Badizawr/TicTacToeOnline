@@ -58,7 +58,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/game_id"
+        android:id="@+id/game_id_input"
         android:textSize="24sp"
         android:textStyle="bold"
         android:inputType="number"

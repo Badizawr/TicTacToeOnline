@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.tictactoeonline.databinding.ActivityMainBinding
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlin.random.Random
 import kotlin.random.nextInt
 
@@ -32,7 +34,25 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun joinOnlineGame() {
-
+        var gameId = binding.gameIdInput.text.toString()
+        if (gameId.isEmpty()) {
+            binding.gameIdInput.setError("Please enter game ID")
+            return
+        }
+        GameData.myID = "O"
+        Firebase.firestore.collection("games")
+            .document(gameId)
+            .get()
+            .addOnSuccessListener {
+                val model = it?.toObject(GameModel::class.java)
+                if (model == null) {
+                    binding.gameIdInput.setError("Please enter valid game ID")
+                }else{
+                    model.gameStatus = GameStatus.JOINED
+                    GameData.saveGameModel(model)
+                    startGame()
+                }
+            }
     }
 
     private fun createOnlineGame() {
@@ -47,6 +67,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createOfflineGame() {
+        GameData.myID = "X"
         GameData.saveGameModel(
             GameModel(
                 gameStatus = GameStatus.JOINED
